@@ -39,7 +39,7 @@ spr_player_up:
 .byte $00,$ff,$c0,$00,$7f,$80,$00,$7e
 .byte $00,$00,$e7,$00,$01,$e7,$80,$0d
 
-spr_player_walkup_1:
+spr_player_up_walk1:
 .byte $00,$00,$00,$00,$00,$00,$00,$00
 .byte $00,$0e,$24,$70,$1f,$a5,$f8,$3f
 .byte $e7,$fc,$7f,$ff,$fe,$67,$ff,$e6
@@ -49,7 +49,7 @@ spr_player_walkup_1:
 .byte $00,$fe,$c0,$03,$ff,$00,$03,$ff
 .byte $e0,$03,$c7,$60,$01,$82,$00,$0d
 
-spr_player_walkup_2:
+spr_player_up_walk2:
 .byte $00,$00,$00,$00,$00,$00,$00,$00
 .byte $00,$0e,$24,$70,$1f,$a5,$f8,$3f
 .byte $e7,$fc,$7f,$ff,$fe,$67,$ff,$e6
@@ -69,7 +69,7 @@ spr_player_right:
 .byte $01,$ff,$00,$00,$fe,$00,$00,$7e
 .byte $00,$00,$3f,$00,$00,$3f,$80,$0d
 
-spr_player_walkright_1:
+spr_player_right_walk1:
 .byte $00,$00,$00,$00,$00,$00,$00,$00
 .byte $00,$01,$95,$c0,$07,$d7,$e0,$0f
 .byte $d7,$f0,$1f,$ff,$b8,$3c,$ff,$98
@@ -79,7 +79,7 @@ spr_player_walkright_1:
 .byte $01,$ff,$00,$03,$ff,$e0,$0e,$7f
 .byte $20,$0c,$77,$40,$00,$e3,$80,$0d
 
-spr_player_walkright_2:
+spr_player_right_walk2:
 .byte $00,$00,$00,$00,$00,$00,$00,$00
 .byte $00,$01,$95,$c0,$07,$d7,$e0,$0f
 .byte $d7,$f0,$1f,$ff,$b8,$3c,$ff,$98
@@ -99,7 +99,7 @@ spr_player_left:
 .byte $00,$ff,$80,$00,$7f,$00,$00,$7e
 .byte $00,$00,$fc,$00,$01,$fc,$00,$0d
 
-spr_player_walkleft_1:
+spr_player_left_walk1:
 .byte $00,$00,$00,$00,$00,$00,$00,$00
 .byte $00,$03,$a9,$80,$07,$eb,$e0,$0f
 .byte $eb,$f0,$1d,$ff,$f8,$19,$ff,$3c
@@ -109,7 +109,7 @@ spr_player_walkleft_1:
 .byte $00,$ff,$80,$07,$ff,$c0,$04,$fe
 .byte $70,$02,$ee,$30,$01,$c7,$00,$0d
 
-spr_player_walkleft_2:
+spr_player_left_walk2:
 .byte $00,$00,$00,$00,$00,$00,$00,$00
 .byte $00,$03,$a9,$80,$07,$eb,$e0,$0f
 .byte $eb,$f0,$1d,$ff,$f8,$19,$ff,$3c

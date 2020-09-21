@@ -6,9 +6,7 @@
 
 jmp start
 
-;CLEAR = $E544
-;GETIN  =  $FFE4
-;SCNKEY =  $FF9F
+; ============================================
 
 SPRITE_ADDR = 2040
 V = $d000
@@ -23,6 +21,8 @@ PTRB = $fd
 player_x: .byte 100,0
 player_y: .byte 100
 
+; ============================================
+
 .macro raster_wait label
 	lda #$ff
 	cmp $d012
@@ -36,6 +36,27 @@ player_y: .byte 100
 	stx PTRA + 1
 .endmacro
 
+.macro load_sprite_dir idle, walk1, walk2
+	.local s_idl, s_wk1, s_wk2
+	lda ANIM_TIMER
+	cmp #63
+	bcc s_wk1
+	cmp #127
+	bcc s_idl
+	cmp #192
+	bcc s_wk2
+	jmp s_idl
+s_idl:
+	load_sprite_addr idle
+	rts
+s_wk1:
+	load_sprite_addr walk1
+	rts
+s_wk2:
+	load_sprite_addr walk2
+	rts
+.endmacro
+
 .macro increment_timer amount
 	lda ANIM_TIMER
 	adc #amount
@@ -43,6 +64,8 @@ player_y: .byte 100
 .endmacro
 
 .include "sprites.inc"
+
+; ============================================
 
 start:
 	lda #147
@@ -65,6 +88,8 @@ start:
 	sta V + 29
 
 	load_sprite_addr spr_player_down
+	lda #1
+	sta DIRECTION
 	lda #0
 	sta ANIM_TIMER
 
@@ -76,31 +101,33 @@ main:
 	lda JOYSTICK
 	and #1
 	bne @down
-	dec player_x
+	dec player_y
 @down:
 	lda JOYSTICK
 	and #2
 	bne @left
-	inc player_x
+	inc player_y
 @left:
 	lda JOYSTICK
 	and #4
 	bne @right
-	dec player_y
+	dec player_x
 @right:
 	lda JOYSTICK
 	and #8
 	bne @end
-	inc player_y
+	inc player_x
 
 @end:
 	lda player_x
-	sta V + 1
-	lda player_y
 	sta V
+	lda player_y
+	sta V + 1
 	jsr animate_player
-	jmp main
 
+	lda JOYSTICK
+	and #16
+	bne main
 	rts
 
 load_sprite:
@@ -115,61 +142,61 @@ load_sprite:
 
 animate_player:
 	ldx JOYSTICK
-;@down:
+down:
 	txa
 	and #2
-	bne @up
+	bne up
 	lda #1
 	sta DIRECTION
 
-	lda ANIM_TIMER
-	cmp #63
-	bcc @downwalk1
-	cmp #127
-	bcc @downidle
-	cmp #192
-	bcc @downwalk2
-	jmp @downidle
-@downidle:
-	load_sprite_addr spr_player_down
-	rts
-@downwalk1:
-	load_sprite_addr spr_player_down_walk1
-	rts
-@downwalk2:
-	load_sprite_addr spr_player_down_walk2
-	rts
+	load_sprite_dir spr_player_down, spr_player_down_walk1, spr_player_down_walk2
 
-@up:
+up:
 	txa
 	and #1
-	bne @end
+	bne right
 	lda #0
 	sta DIRECTION
 
-	lda ANIM_TIMER
-	cmp #63
-	bcc @upwalk1
-	cmp #127
-	bcc @upidle
-	cmp #192
-	bcc @upwalk2
-	jmp @upidle
-@upidle:
+	load_sprite_dir spr_player_up, spr_player_up_walk1, spr_player_up_walk2
+
+right:
+	txa
+	and #8
+	bne left
+	lda #3
+	sta DIRECTION
+
+	load_sprite_dir spr_player_right, spr_player_right_walk1, spr_player_right_walk2
+
+left:
+	txa
+	and #4
+	bne end
+	lda #2
+	sta DIRECTION
+
+	load_sprite_dir spr_player_left, spr_player_left_walk1, spr_player_left_walk2
+
+end:
+	lda DIRECTION
+	cmp #0
+	beq @endup
+	cmp #1
+	beq @enddown
+	cmp #2
+	beq @endleft
+	cmp #3
+	beq @endright
+@endup:
 	load_sprite_addr spr_player_up
 	rts
-@upwalk1:
-	load_sprite_addr spr_player_up_walk1
-	rts
-@upwalk2:
-	load_sprite_addr spr_player_up_walk2
-	rts
-
-@end:
-	lda DIRECTION
-	beq @end2
+@enddown:
 	load_sprite_addr spr_player_down
 	rts
-@end2:
-	load_sprite_addr spr_player_up
+@endleft:
+	load_sprite_addr spr_player_left
+	rts
+@endright:
+	load_sprite_addr spr_player_right
 	rts
